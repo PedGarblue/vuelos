@@ -2,6 +2,7 @@
     <div 
         class="
             min-h-screen
+            min-w-screen
             flex flex-col 
             sm:justify-center
             items-center
@@ -12,8 +13,22 @@
             to-gray-900
         ">
         <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg"
+            class="
+                sm:w-[75vw]
+                sm:h-[80vh]
+                w-full
+                h-full
+                px-6 py-4
+                bg-white
+                dark:bg-gray-800
+                shadow-md
+                overflow-hidden
+                sm:rounded-lg
+                "
         >
+            <div v-if="$slots.header" class="my-8">
+                <slot name="header" />
+            </div>
             <slot />
         </div>
     </div>
