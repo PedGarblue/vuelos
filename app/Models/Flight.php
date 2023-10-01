@@ -18,6 +18,15 @@ class Flight extends Model
         'seats',
     ];
 
+    protected $fillable = [
+        'name',
+        'origin',
+        'destination',
+        'departure',
+        'arrival',
+        'seats',
+    ];
+
     protected $casts = [
         'departure' => 'datetime:Y-m-d H:i',
         'arrival' => 'datetime:Y-m-d H:i',
@@ -27,4 +36,8 @@ class Flight extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function reservations() {
+        return $this->hasMany(Reservation::class);
+    }
 }

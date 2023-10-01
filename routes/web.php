@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\FlightController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +24,9 @@ Route::get('/', function () {
 
 Route::get('/flights', [FlightController::class, 'index'])->name('flights.index');
 
-Route::get('/dashboard', ['DasboardController@index', 'as' => 'dasboard.index']);
+Route::group(['prefix' => 'reservations'], function () {
+    Route::get('/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
+    Route::post('/', [ReservationController::class, 'store'])->name('reservations.store');
+    Route::put('/{reservation}', [ReservationController::class, 'update'])->name('reservations.update');
+    Route::delete('/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+});
