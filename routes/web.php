@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\FlightController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,11 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    return Inertia::render('Home', [
+        'flights_url' => route('flights.index'),
+    ]);
 });
+
+Route::get('/flights', [FlightController::class, 'index'])->name('flights.index');
 
 Route::get('/dashboard', ['DasboardController@index', 'as' => 'dasboard.index']);
