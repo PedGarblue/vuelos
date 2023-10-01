@@ -37,7 +37,18 @@ class Flight extends Model
         'updated_at',
     ];
 
+    protected $appends = [
+        'available_seats',
+    ];
+
     public function reservations() {
         return $this->hasMany(Reservation::class);
+    }
+
+    public function getAvailableSeatsAttribute() {
+        $sum = $this->reservations->sum(function ($reservation) {
+            return $reservation->tickets->count();
+        });
+        return $this->seats - $sum;
     }
 }

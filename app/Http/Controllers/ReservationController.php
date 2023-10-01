@@ -14,9 +14,15 @@ class ReservationController extends Controller
     {
         $request->validate([
             'flight_id' => 'required|exists:flights,id',
+            'seats' => 'required|integer|min:1',
         ]);
+        $reservation = Reservation::create($request->all());
+        $reservation->tickets()->createMany(
+            array_fill(0, $request->seats, [])
+        );
+        $reservation->load('tickets');
 
-        return Reservation::create($request->all());
+        return $reservation;
     }
 
     /**
@@ -24,6 +30,7 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
+        $reservation->load('tickets');
         return $reservation;
     }
 
@@ -34,9 +41,13 @@ class ReservationController extends Controller
     {
         $request->validate([
             'flight_id' => 'required|exists:flights,id',
+            'seats' => 'required|integer|min:1',
         ]);
 
         $reservation->update($request->all());
+        $reservation->updateSeats($request->seats);
+
+        $reservation->load('tickets');
 
         return $reservation;
     }
