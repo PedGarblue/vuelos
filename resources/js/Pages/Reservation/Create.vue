@@ -23,42 +23,46 @@ const form = useForm({
 <template>
     <GeneralLayout>
         <template #header>
-            <h1 class="text-2xl">Crear Reserva de Vuelo</h1>
-            <div>
-                <Link class="button" :href="return_route || '/flights'">Regresar</Link>
+            <h1 class="text-2xl font-bold">Crear Reserva de Vuelo</h1>
+            <div class="mt-4">
+                <Link class="button button-secondary" :href="return_route || '/flights'">Regresar</Link>
             </div>
         </template>
-        <div>
-            <h2 class="text-xl font-bold">Detalles del Vuelo</h2>
-            <div class="flex flex-col w-fit">
-                <datapill title="Origen" :value="props.flight.origin" />
-                <datapill title="Destino" :value="props.flight.destination" />
-                <datapill title="Salida" :value="props.flight.departure" />
-                <datapill title="Llegada" :value="props.flight.arrival" />
-                <datapill title="Asientos Disponibles" :value="props.flight.available_seats" />
-            </div>
-        </div>
-        <form
-            class="flex flex-col w-fit"
-            @submit.prevent="form.post(`/reservations`)"
-        >
-            <div>
-                <div class="flex flex-col">
-                    <label for="seats">Asientos</label>
-                    <input id="seats" type="number" v-model="form.seats" />
-                    <!-- input error message -->
-                    <div v-if="form.errors.seats">
-                        <span class="text-red-500" v-for="error in form.errors.seats" :key="error">
-                            {{ error }}
-                        </span>
+        <div class="flex flex-col">
+            <div class="mx-auto">
+                <div class="flex flex-col gap-2">
+                    <h2 class="text-xl font-bold">Detalles del Vuelo</h2>
+                    <div class="flex flex-col w-fit gap-2">
+                        <datapill title="Origen" :value="props.flight.origin" />
+                        <datapill title="Destino" :value="props.flight.destination" />
+                        <datapill title="Salida" :value="props.flight.departure" />
+                        <datapill title="Llegada" :value="props.flight.arrival" />
+                        <datapill title="Asientos Disponibles" :value="props.flight.available_seats" />
                     </div>
                 </div>
+                <form
+                    class="flex flex-col w-fit"
+                    @submit.prevent="form.post(`/reservations`)"
+                >
+                    <div class="py-6">
+                        <div class="flex flex-col border rounded-xl overflow-hidden">
+                            <label for="seats" class="px-2 bg-gray-700 text-white">¿Cuanto asientos necesita?</label>
+                            <input id="seats" type="number" v-model="form.seats" class="px-4 rounded-b-xl"/>
+                            <!-- input error message -->
+                            <div v-if="form.errors.seats">
+                                <span class="text-red-500" v-for="error in form.errors.seats" :key="error">
+                                    {{ error }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex flex-col">
+                            <button type="submit" class="button">Crear</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="flex flex-col">
-                <div class="flex flex-col">
-                    <button type="submit" class="button">Crear</button>
-                </div>
-            </div>
-        </form>
+        </div>
     </GeneralLayout>
 </template>

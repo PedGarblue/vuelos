@@ -62,7 +62,7 @@ const flightSearchForm = useForm({
                     </div>
                 </div>
                 <div >
-                    <button class="bg-blue-500 text-white rounded-lg p-2" @click="flightSearchForm.get('/flights')">
+                    <button class="button" @click="flightSearchForm.get('/flights')">
                         Buscar
                     </button>
                 </div>
@@ -76,16 +76,14 @@ const flightSearchForm = useForm({
 
 <style>
 .reservation-list {
-    @apply py-2;
+    @apply py-2 grid-cols-1 lg:grid-cols-3;
     display: grid;
-    grid-template-columns: repeat(3, minmax(18rem, 100%));
     grid-gap: 1rem;
     overflow-y: auto;
 }
 .flight-list {
-    @apply py-2;
+    @apply py-2 grid-cols-1 lg:grid-cols-3;
     display: grid;
-    grid-template-columns: repeat(3, minmax(18rem, 100%));
     grid-gap: 1rem;
     overflow-y: auto;
 }

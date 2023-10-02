@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 .button {
-  @apply bg-blue-700 text-white font-bold py-2 px-4 rounded-lg;
+  @apply bg-blue-500 text-white font-bold py-2 px-4 rounded-full;
+}
+
+.button-danger {
+  @apply bg-red-400 text-white font-bold py-2 px-4 rounded-full;
+}
+
+.button-secondary {
+  @apply bg-gray-400 text-white font-bold py-2 px-4 rounded-full;
 }

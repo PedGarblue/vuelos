@@ -4,7 +4,7 @@
             min-h-screen
             min-w-screen
             flex flex-col 
-            sm:justify-center
+            justify-center
             items-center
             pt-6
             sm:pt-0

@@ -12,22 +12,24 @@ defineProps({
     <Head title="Home"/>
 
     <GeneralLayout>
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800">
-                    <div>
-                        <ApplicationLogo class="h-20"/>
-                    </div>
-                    <div class="p-6 text-gray-900 dark:text-gray-100">¡Bienvenidos a Vuelos App!</div>
+        <div class="flex h-full w-full">
+            <div class="my-auto mx-auto">
+                <div class="p-6 text-gray-900 text-3xl">¡Bienvenidos a Vuelos App!</div>
+                <div class="flex py-4">
+                    <ApplicationLogo class="mx-auto text-[10rem] text-black"/>
+                </div>
+                <div class="flex flex-col">
                     <Link 
                         :href="flights_url"
+                        class="mx-auto"
                     >
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button class="button text-xl">
                             Ver vuelos
                         </button>
                     </Link>
-                    </div>
+
                 </div>
             </div>
+        </div>
     </GeneralLayout>
 </template>

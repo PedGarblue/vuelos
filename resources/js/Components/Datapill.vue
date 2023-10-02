@@ -20,10 +20,10 @@ defineProps({
 
 <style lang="postcss" scoped>
 .datafield {
-    @apply border-2 rounded-lg w-full flex overflow-hidden;
+    @apply border-2 rounded-full w-full flex overflow-hidden;
 }
 .datafield__label {
-    @apply px-2 bg-blue-900 text-white;
+    @apply px-2 bg-blue-900 text-white font-bold;
 }
 .datafield__value {
     @apply px-2;
