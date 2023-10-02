@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link, Head } from '@inertiajs/vue3';
 import GeneralLayout from '../../Layouts/GeneralLayout.vue';
 import Datapill from '../../Components/Datapill.vue';
 
@@ -18,6 +18,7 @@ const deleteform = useForm({});
 
 </script>
 <template>
+    <Head title="Vuelos - Tu Reserva"></Head>
     <GeneralLayout>
         <template #header>
             <h1 class="text-2xl mb-4 font-bold">Ver Reserva de Vuelo</h1>

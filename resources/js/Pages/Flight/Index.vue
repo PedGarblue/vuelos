@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, Head } from '@inertiajs/vue3';
 import FlightCard from '../../Components/FlightCard.vue';
 import ReservationCard from '../../Components/ReservationCard.vue';
 import GeneralLayout from '../../Layouts/GeneralLayout.vue';
@@ -17,6 +17,7 @@ const flightSearchForm = useForm({
 });
 </script>
 <template>
+    <Head title="Vuelos - Listado" />
     <GeneralLayout>
         <template #header>
             <h1 class="text-2xl font-bold">Vuelos</h1>

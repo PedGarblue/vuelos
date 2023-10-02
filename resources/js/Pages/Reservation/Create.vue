@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link, Head } from '@inertiajs/vue3';
 import GeneralLayout from '../../Layouts/GeneralLayout.vue';
 import Datapill from '../../Components/Datapill.vue';
 
@@ -21,6 +21,7 @@ const form = useForm({
 </script>
 
 <template>
+    <Head title="Vuelos - Crear Reserva" />
     <GeneralLayout>
         <template #header>
             <h1 class="text-2xl font-bold">Crear Reserva de Vuelo</h1>
