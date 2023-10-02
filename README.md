@@ -10,6 +10,9 @@ App para reservas de vuelos
  - MySql
  - SQLite (for testing db)
  - Nodejs >= 16 (frontend builds)
+ 
+### Other
+[Database Diagram](https://lucid.app/lucidchart/8e5e9d59-ce41-4d42-8cea-9930fe4fb765/edit?viewport_loc=-1338%2C-169%2C3914%2C1893%2C0_0&invitationId=inv_05ad64ba-6593-44a3-8a8b-f511bf19da15) (Lucidchart)
 
 ## Installation
 
