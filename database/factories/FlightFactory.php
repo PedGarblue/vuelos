@@ -16,12 +16,14 @@ class FlightFactory extends Factory
      */
     public function definition(): array
     {
+        $departure = $this->faker->dateTimeBetween('now', '+ 1 year');
+        $arrival = $this->faker->dateTimeBetween($departure, $departure->format('Y-m-d H:i:s') . ' + 6 hours');
         return [
             'name' => $this->faker->regexify('[A-Z]{3}[0-9]{3}'),
             'origin' => $this->faker->city,
             'destination' => $this->faker->city,
-            'departure' => $this->faker->dateTime,
-            'arrival' => $this->faker->dateTime,
+            'departure' => $departure,
+            'arrival' => $arrival,
             'seats' => $this->faker->numberBetween(100, 200),
         ];
     }
