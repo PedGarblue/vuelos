@@ -25,6 +25,13 @@ class FlightController extends Controller
                 $query->orWhere('destination', 'like', "%{$search}%");
             })
             ->get();
+
+        // omit flights with no seats available
+        $flights = $flights->filter(function ($flight) {
+            return $flight->available_seats > 0;
+        });
+
+
         $reservations = Reservation::all();
         $reservations->load(['tickets', 'flight']);
 

@@ -85,6 +85,40 @@ class FlightsTest extends TestCase
             });
     }
 
+    public function test_list_flights_renders_correctly_and_omits_full_flights() {
+        Flight::factory(20)->create();
+        $full_flight = Flight::factory()->create([
+            'seats' => 10,
+        ]);
+        $reservation = Reservation::factory()->create([
+            'flight_id' => $full_flight->id,
+        ]);
+        Ticket::factory(10)->create([
+            'reservation_id' => $reservation->id,
+        ]);
+
+        $response = $this->get('/flights');
+
+        $response->assertOk()
+            ->assertInertia(function (Assert $page) use ($full_flight) {
+                $page->component('Flight/Index')
+                    ->has('flights', 20, function (Assert $flight) {
+                        $flight->hasAll([
+                            'id',
+                            'name',
+                            'origin',
+                            'destination',
+                            'departure',
+                            'arrival',
+                            'seats',
+                            'available_seats',
+                        ]);
+                        $flight->whereNot('available_seats', 0);
+                    });
+            });
+
+    }
+
     public function test_list_can_perform_flight_search_term_by_origin(): void
     {
         Flight::factory(20)->create();
