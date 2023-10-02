@@ -1,4 +1,5 @@
 <script setup>
+import { reactive, defineProps } from 'vue';
 import { useForm, Head } from '@inertiajs/vue3';
 import FlightCard from '../../Components/FlightCard.vue';
 import ReservationCard from '../../Components/ReservationCard.vue';
@@ -15,6 +16,14 @@ const flightSearchForm = useForm({
     origin: props.search.origin || '',
     destination: props.search.destination || '', 
 });
+
+const reservationsContainer = reactive({
+    show: false,
+});
+
+const toggleReservationsContainer = () => {
+    reservationsContainer.show = !reservationsContainer.show;
+};
 </script>
 <template>
     <Head title="Vuelos - Listado" />
@@ -22,18 +31,23 @@ const flightSearchForm = useForm({
         <template #header>
             <h1 class="text-2xl font-bold">Vuelos</h1>
         </template>
-        <div class="border-2 border-gray-100 rounded-lg px-2 py-2">
-            <div class="px-2">
-                <h2 class="text-xl">Mis Reservas</h2>
-            </div>
-            <div v-if="reservations.length > 0" class="reservation-list">
+        <div class="border-2 border-gray-100 rounded-lg overflow-hidden text-white">
+            <button @click="toggleReservationsContainer" class="w-full">
+                <div class="px-2 bg-slate-700">
+                    <h2 class="text-xl">Mis Reservas</h2>
+                </div>
+            </button>
+            <div v-if="reservations.length > 0" class="reservation-list" :class="{
+                'hidden': !reservationsContainer.show,
+            }">
                 <ReservationCard
                     v-for="reservation in reservations"
                     :reservation="reservation"
                     :key="reservation.id"
+                    class="w-full"
                 />
             </div>
-            <div v-else>
+            <div v-else class="text-">
                 No tienes reservas aún.
             </div>
         </div>
@@ -83,7 +97,7 @@ const flightSearchForm = useForm({
     overflow-y: auto;
 }
 .flight-list {
-    @apply py-2 grid-cols-1 lg:grid-cols-3;
+    @apply grid-cols-1 lg:grid-cols-3 border-2 rounded-xl mt-4 h-[21rem] xl:h-[25.5rem];
     display: grid;
     grid-gap: 1rem;
     overflow-y: auto;
