@@ -32,6 +32,21 @@ class ReservationTest extends TestCase
         $tickets = Ticket::where('reservation_id', 1);  
         $this->assertEquals(3, $tickets->count());
     }
+
+    public function test_returns_errors_when_storing_a_reservation_with_invalid_data(): void
+    {
+        $flight = Flight::factory()->create();
+
+        $payload = [
+            'flight_id' => $flight->id,
+            'seats' => 0,
+        ];
+
+        $response = $this->post('/reservations', $payload);
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors(['seats']);
+    }
     
     public function test_can_view_a_reservation(): void {
         $reservation = Reservation::factory()->create();
@@ -80,7 +95,8 @@ class ReservationTest extends TestCase
             'seats' => 2,
         ]); 
 
-        $response->assertRedirect(`/reservation/$reservation->id`);
+        $response->assertRedirect();
+        $response->assertSessionHasNoErrors();
         $tickets = Ticket::where('reservation_id', $reservation->id)->get();
         $this->assertEquals($tickets->count(), 2);
     }
@@ -98,9 +114,27 @@ class ReservationTest extends TestCase
             'seats' => 4,
         ]); 
 
-        $response->assertRedirect(`/reservation/$reservation->id`);
+        $response->assertRedirect();
+        $response->assertSessionHasNoErrors();
         $tickets = Ticket::where('reservation_id', $reservation->id)->get();
         $this->assertEquals($tickets->count(), 4);
+    }
+
+    public function test_returns_errors_when_updating_a_reservation_with_invalid_data(): void {
+        $flight = Flight::factory()->create();
+        $reservation = Reservation::factory()->create([
+            'flight_id' => $flight->id,
+        ]);
+        Ticket::factory()->count(3)->create([
+            'reservation_id' => $reservation->id,
+        ]);
+
+        $response = $this->put('/reservations/' . $reservation->id, [
+            'seats' => 0,
+        ]); 
+
+        $response->assertRedirect();
+        $response->assertSessionHasErrors(['seats']);
     }
 
     public function test_can_delete_a_reservation(): void {

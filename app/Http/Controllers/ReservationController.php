@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreReservationRequest;
+use App\Http\Requests\UpdateReservationRequest;
 use App\Models\Flight;
 use App\Models\Reservation;
 use Illuminate\Http\RedirectResponse;
@@ -22,12 +24,8 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreReservationRequest $request): RedirectResponse
     {
-        $request->validate([
-            'flight_id' => 'required|exists:flights,id',
-            'seats' => 'required|integer|min:1',
-        ]);
         $reservation = Reservation::create($request->all());
         $reservation->tickets()->createMany(
             array_fill(0, $request->seats, [])
@@ -52,12 +50,8 @@ class ReservationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reservation $reservation): RedirectResponse
+    public function update(UpdateReservationRequest $request, Reservation $reservation): RedirectResponse
     {
-        $request->validate([
-            'seats' => 'required|integer|min:1',
-        ]);
-
         $reservation->update($request->all());
         $reservation->updateSeats($request->seats);
 
