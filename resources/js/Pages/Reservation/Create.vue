@@ -42,6 +42,12 @@ const form = useForm({
                 <div class="flex flex-col">
                     <label for="seats">Asientos</label>
                     <input id="seats" type="number" v-model="form.seats" />
+                    <!-- input error message -->
+                    <div v-if="form.errors.seats">
+                        <span class="text-red-500" v-for="error in form.errors.seats" :key="error">
+                            {{ error }}
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="flex flex-col">

@@ -3,7 +3,7 @@ import { useForm } from '@inertiajs/vue3';
 import GeneralLayout from '../../Layouts/GeneralLayout.vue';
 import Datapill from '../../Components/Datapill.vue';
 
-defineProps({
+const props = defineProps({
     reservation: {
         type: Object,
         required: true,
@@ -11,7 +11,7 @@ defineProps({
 });
 
 const form = useForm({
-    seats: 0,
+    seats: props.reservation.tickets.length,
 });
 
 const deleteform = useForm({});
@@ -55,6 +55,11 @@ const deleteReservation = () => {
                     <div class="flex flex-col">
                         <label for="seats">Asientos</label>
                         <input id="seats" type="number" v-model="form.seats" />
+                        <div v-if="form.errors.seats">
+                            <span class="text-red-500" v-for="error in form.errors.seats" :key="error">
+                                {{ error }}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="flex flex-col">
