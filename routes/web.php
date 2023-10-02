@@ -22,7 +22,10 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/flights', [FlightController::class, 'index'])->name('flights.index');
+Route::group(['prefix' => 'flights'], function () {
+    Route::get('/', [FlightController::class, 'index'])->name('flights.index');
+    Route::get('/{flight}/reserve', [ReservationController::class, 'create'])->name('reservations.create');
+});
 
 Route::group(['prefix' => 'reservations'], function () {
     Route::get('/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');

@@ -1,29 +1,33 @@
 <script setup>
+import { Link } from '@inertiajs/vue3'
+
 defineProps({
     reservation: Object,
 });
 </script>
 
 <template>
-    <div class="reservation-card">
-        <div class="bg-sky-700 text-white px-4 py-2">
-            <h3 class="text-xl font-bold">
-                <span>{{ reservation.flight.origin }}</span> to <span>{{ reservation.flight.destination }}</span>
-            </h3>
-        </div>
-        <div class="px-4 py-1">
-            <p class="text-gray-500 text-sm">Departure: {{ reservation.flight.departure }}</p>
-            <p class="text-gray-500 text-sm">Arrival: {{ reservation.flight.arrival }}</p>
-        </div>
-        <div class="px-4 py-1">
-            <div class="flex">
-                <div class="ml-auto">
-                    <span>Seats:</span>
-                    <span class="ml-1">{{ reservation.tickets.length }}</span>
+    <Link :href="`/reservations/${reservation.id}`">
+        <div class="reservation-card">
+            <div class="bg-sky-700 text-white px-4 py-2">
+                <h3 class="text-xl font-bold">
+                    <span>{{ reservation.flight.origin }}</span> to <span>{{ reservation.flight.destination }}</span>
+                </h3>
+            </div>
+            <div class="px-4 py-1">
+                <p class="text-gray-500 text-sm">Departure: {{ reservation.flight.departure }}</p>
+                <p class="text-gray-500 text-sm">Arrival: {{ reservation.flight.arrival }}</p>
+            </div>
+            <div class="px-4 py-1">
+                <div class="flex">
+                    <div class="ml-auto">
+                        <span>Asientos:</span>
+                        <span class="ml-1">{{ reservation.tickets.length }}</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </Link>
 </template>
 
 <style lang="postcss" scoped>

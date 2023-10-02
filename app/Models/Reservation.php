@@ -19,6 +19,11 @@ class Reservation extends Model
         'flight_id',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i',
+        'updated_at' => 'datetime:Y-m-d H:i',
+    ];
+
     public function flight() {
         return $this->belongsTo(Flight::class);
     }
@@ -34,12 +39,11 @@ class Reservation extends Model
         // if a reservation has 3 tickets and we update it to have 2 seats, we need to delete 1 ticket
         $tickets = $this->tickets;
         if ($tickets->count() < $seats) {
-            $tickets->createMany(
-                array_fill(0, $seats - $tickets->count(), [])
-            );
+            for ($i = 0; $i < $seats - $tickets->count(); $i++) {
+                $this->tickets()->create([]);
+            }
         } else if ($tickets->count() > $seats) {
             $tickets->sortByDesc('id')->take($tickets->count() - $seats)->each->delete();
         }
-        
     }
 }

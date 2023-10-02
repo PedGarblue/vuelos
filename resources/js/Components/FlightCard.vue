@@ -1,28 +1,34 @@
 <script setup>
+import { Link } from '@inertiajs/vue3';
+
 defineProps({
     flight: Object,
 });
 </script>
 <template>
-    <div class="flight-card">
-        <div class="bg-slate-700 text-white px-4 py-2">
-            <h3 class="text-xl font-bold">
-                <span>{{ flight.origin }}</span> to <span>{{ flight.destination }}</span>
-            </h3>
-        </div>
-        <div class="px-4 py-1">
-            <p class="text-gray-500 text-sm">Departure: {{ flight.departure }}</p>
-            <p class="text-gray-500 text-sm">Arrival: {{ flight.arrival }}</p>
-        </div>
-        <div class="px-4 py-1">
-            <div class="flex">
-                <div class="ml-auto">
-                    <span>Available Seats:</span>
-                    <span class="ml-1">{{ flight.available_seats }}</span>
+    <Link :href="`/flights/${flight.id}/reserve`">
+        <div class="flight-card">
+            <div class="bg-slate-700 text-white px-4 py-2">
+                <h3 class="text-xl font-bold">
+                    <span>{{ flight.origin }}</span> to <span>{{ flight.destination }}</span>
+                </h3>
+            </div>
+            <div class="px-4 py-1">
+                <p class="text-gray-500 text-sm">Departure: {{ flight.departure }}</p>
+                <p class="text-gray-500 text-sm">Arrival: {{ flight.arrival }}</p>
+            </div>
+            <div class="px-4 py-1 bg-gray-200">
+                <div class="flex">
+                    <div class="ml-auto">
+                        <span class="h-full">Asientos disponibles</span>
+                        <span class="ml-1" :class="{
+                            
+                        }">{{ flight.available_seats }}</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </Link>
 </template>
 
 <style scoped>

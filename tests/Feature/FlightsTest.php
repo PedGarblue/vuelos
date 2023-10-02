@@ -13,6 +13,28 @@ class FlightsTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_renders_flight_reservation_page(): void
+    {
+        $flight = Flight::factory()->create();
+
+        $response = $this->get('/flights/' . $flight->id . '/reserve');
+
+        $response->assertStatus(200)
+            ->assertInertia(function (Assert $page) use ($flight) {
+                $page->component('Reservation/Create')
+                    ->has('flight', fn (Assert $page) => $page
+                        ->where('id', $flight->id)
+                        ->where('name', $flight->name)
+                        ->where('origin', $flight->origin)
+                        ->where('destination', $flight->destination)
+                        ->where('departure', $flight->departure->format('Y-m-d H:i'))
+                        ->where('arrival', $flight->arrival->format('Y-m-d H:i'))
+                        ->where('seats', $flight->seats)
+                        ->where('available_seats', $flight->seats)
+                    );
+            });
+    }
+
     public function test_lists_flights_and_renders_correctly(): void
     {
         $flights = Flight::factory(20)->create();
@@ -39,7 +61,6 @@ class FlightsTest extends TestCase
                             'arrival',
                             'seats',
                             'available_seats',
-                            'reservations',
                         ]);
                     })
                     ->where('flights.0.id', 1)
@@ -55,6 +76,7 @@ class FlightsTest extends TestCase
                         $page->hasAll([
                             'id',
                             'flight_id',
+                            'flight',
                             'tickets',
                             'created_at',
                             'updated_at',
