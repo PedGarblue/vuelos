@@ -5,7 +5,6 @@ import FlightCard from '../../Components/FlightCard.vue';
 import ReservationCard from '../../Components/ReservationCard.vue';
 import GeneralLayout from '../../Layouts/GeneralLayout.vue';
 
-
 const props = defineProps({
     flights: Object,
     reservations: Object,
@@ -15,6 +14,8 @@ const props = defineProps({
 const flightSearchForm = useForm({
     origin: props.search.origin || '',
     destination: props.search.destination || '', 
+    from: props.search.from || new Date().toISOString().slice(0, 10),
+    to: props.search.to || '',
 });
 
 const reservationsContainer = reactive({
@@ -56,7 +57,7 @@ const toggleReservationsContainer = () => {
                 <h2 class="text-xl">Listado de Vuelos</h2>
             </div>
             <div class="border rounded-xl p-2">
-                <div class="flex gap-4 mb-2">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
                     <div>
                         <label for="origin">Origen</label>
                         <input
@@ -73,6 +74,23 @@ const toggleReservationsContainer = () => {
                             type="text"
                             v-model="flightSearchForm.destination"
                             class="border rounded-lg p-2 w-full"
+                        />
+                    </div>
+                    <div>
+                        <label for="from">Desde Día</label>
+                        <vue-date-picker
+                            id="to"
+                            v-model="flightSearchForm.from"
+                            class="p-1 w-full"
+                        />
+                    </div>
+                    <div>
+                        <label for="to">Hasta Día</label>
+                        <vue-date-picker
+                            id="to"
+                            type="date"
+                            v-model="flightSearchForm.to"
+                            class="p-1 w-full"
                         />
                     </div>
                 </div>

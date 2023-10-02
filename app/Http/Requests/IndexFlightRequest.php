@@ -24,6 +24,8 @@ class IndexFlightRequest extends FormRequest
         return [
             'search' => 'nullable|string|max:255',
             'destination' => 'nullable|string|max:255',
+            'from' => 'nullable|string|max:255',
+            'to' => 'nullable|string|max:255',
         ];
     }
 }

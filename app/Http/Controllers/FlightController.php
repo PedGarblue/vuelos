@@ -24,6 +24,13 @@ class FlightController extends Controller
             ->when($request->destination, function ($query, $search) {
                 $query->orWhere('destination', 'like', "%{$search}%");
             })
+            ->when($request->from, function ($query, $search) {
+                // search where departure is greater than or equal to the search
+                $query->where('departure', '>=', $search);
+            })
+            ->when($request->to, function ($query, $search) {
+                $query->where('departure', '<=', $search);
+            })
             ->get();
 
         // omit flights with no seats available
@@ -38,7 +45,7 @@ class FlightController extends Controller
         return Inertia::render('Flight/Index', [
             'flights' => $flights,
             'reservations' => $reservations,
-            'search' => $request->all(['origin', 'destination']),
+            'search' => $request->all(['origin', 'destination', 'from', 'to'])
         ]);
     }
 

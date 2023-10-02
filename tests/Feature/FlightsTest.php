@@ -6,12 +6,14 @@ use App\Models\Flight;
 use App\Models\Reservation;
 use App\Models\Ticket;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Inertia\Testing\AssertableInertia as Assert;
 
 class FlightsTest extends TestCase
 {
     use RefreshDatabase;
+    use WithFaker;
 
     public function test_renders_flight_reservation_page(): void
     {
@@ -157,16 +159,18 @@ class FlightsTest extends TestCase
                     ->has('search', function (Assert $page) use ($flight_to_search) {
                         $page->where('origin', $flight_to_search->origin);
                         $page->where('destination', null);
+                        $page->where('from', null);
+                        $page->where('to', null);
                     });
             });
     } 
 
     public function test_list_can_perform_flight_search_term_by_destination(): void
     {
-        $flights = Flight::factory(20)->create();
+        Flight::factory(20)->create();
 
         $flight_to_search = Flight::factory()->create([
-            'origin' => 'LAX',
+            'origin' => '',
             'destination' => 'JFK',
         ]);
 
@@ -199,9 +203,102 @@ class FlightsTest extends TestCase
                     ->has('search', function (Assert $page) use ($flight_to_search) {
                         $page->where('origin', null);
                         $page->where('destination', $flight_to_search->destination);
+                        $page->where('from', null);
+                        $page->where('to', null);
                     });
 
             });
     } 
 
+    public function test_list_can_perform_flight_search_by_min_date(): void
+    {
+        Flight::factory(20)->create([
+            'departure' => $this->faker->dateTimeBetween('1 day', '15 days')
+        ]);
+
+        $flight_to_search = Flight::factory()->create([
+            'departure' => now()->addMonth(1),
+        ]);
+
+        $response = $this->get('/flights?from='. $flight_to_search->departure->format('Y-m-d H:i'));
+        $response->assertStatus(200)
+            ->assertInertia(function (Assert $page) use ($flight_to_search) {
+                $page->component('Flight/Index')
+                    ->has('flights', 1, function (Assert $page) {
+                        $page->hasAll([
+                            'id',
+                            'name',
+                            'origin',
+                            'destination',
+                            'departure',
+                            'arrival',
+                            'seats',
+                            'available_seats',
+                        ]);
+                    })
+                    ->where('flights.0.id', $flight_to_search->id)
+                    ->where('flights.0.name', $flight_to_search->name)
+                    ->where('flights.0.origin', $flight_to_search->origin)
+                    ->where('flights.0.destination', $flight_to_search->destination)
+                    // cast to string to compare the date format (Y-m-d H:i)
+                    ->where('flights.0.departure', $flight_to_search->departure->format('Y-m-d H:i'))
+                    ->where('flights.0.arrival', $flight_to_search->arrival->format('Y-m-d H:i'))
+                    ->where('flights.0.seats', $flight_to_search->seats)
+                    ->where('flights.0.available_seats', $flight_to_search->seats)
+                    ->has('reservations', 0)
+                    ->has('search', function (Assert $page) use ($flight_to_search) {
+                        $page->where('origin', null);
+                        $page->where('destination', null);
+                        $page->where('from', $flight_to_search->departure->format('Y-m-d H:i'));
+                        $page->where('to', null);
+                    });
+
+            });
+    } 
+
+    public function test_list_can_perform_flight_search_by_max_date(): void
+    {
+        Flight::factory(20)->create([
+            'departure' => $this->faker->dateTimeBetween('2 months', '3 months'),
+        ]);
+
+        $flight_to_search = Flight::factory()->create([
+            'departure' => now()->addMonth(1),
+        ]);
+
+        $response = $this->get('/flights?to='. $flight_to_search->departure->format('Y-m-d H:i:s'));
+        $response->assertStatus(200)
+            ->assertInertia(function (Assert $page) use ($flight_to_search) {
+                $page->component('Flight/Index')
+                    ->has('flights', 1, function (Assert $page) {
+                        $page->hasAll([
+                            'id',
+                            'name',
+                            'origin',
+                            'destination',
+                            'departure',
+                            'arrival',
+                            'seats',
+                            'available_seats',
+                        ]);
+                    })
+                    ->where('flights.0.id', $flight_to_search->id)
+                    ->where('flights.0.name', $flight_to_search->name)
+                    ->where('flights.0.origin', $flight_to_search->origin)
+                    ->where('flights.0.destination', $flight_to_search->destination)
+                    // cast to string to compare the date format (Y-m-d H:i)
+                    ->where('flights.0.departure', $flight_to_search->departure->format('Y-m-d H:i'))
+                    ->where('flights.0.arrival', $flight_to_search->arrival->format('Y-m-d H:i'))
+                    ->where('flights.0.seats', $flight_to_search->seats)
+                    ->where('flights.0.available_seats', $flight_to_search->seats)
+                    ->has('reservations', 0)
+                    ->has('search', function (Assert $page) use ($flight_to_search) {
+                        $page->where('origin', null);
+                        $page->where('destination', null);
+                        $page->where('from', null);
+                        $page->where('to', $flight_to_search->departure->format('Y-m-d H:i:s'));
+                    });
+
+            });
+    } 
 }
