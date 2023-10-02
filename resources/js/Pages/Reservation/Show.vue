@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, Link } from '@inertiajs/vue3';
 import GeneralLayout from '../../Layouts/GeneralLayout.vue';
 import Datapill from '../../Components/Datapill.vue';
 
@@ -16,16 +16,14 @@ const form = useForm({
 
 const deleteform = useForm({});
 
-const deleteReservation = () => {
-    if (confirm('¿Estás seguro de eliminar esta reserva?')) {
-        deleteform.delete(`/reservations/${reservation.id}`);
-    }
-};
 </script>
 <template>
     <GeneralLayout>
         <template #header>
             <h1 class="text-2xl">Ver Reserva de Vuelo</h1>
+            <div>
+                <Link href="/flights" class="button">Regresar</Link>
+            </div>
         </template>
         <div>
             <h2 class="text-xl font-bold">Detalles del Vuelo</h2>

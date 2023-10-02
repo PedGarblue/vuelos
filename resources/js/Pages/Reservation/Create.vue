@@ -8,6 +8,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    return_route: {
+        type: String,
+        required: false,
+    },
 });
 
 const form = useForm({
@@ -21,7 +25,7 @@ const form = useForm({
         <template #header>
             <h1 class="text-2xl">Crear Reserva de Vuelo</h1>
             <div>
-                <Link class="button" href="/flights">Regresar</Link>
+                <Link class="button" :href="return_route || '/flights'">Regresar</Link>
             </div>
         </template>
         <div>

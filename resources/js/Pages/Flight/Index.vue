@@ -5,14 +5,15 @@ import ReservationCard from '../../Components/ReservationCard.vue';
 import GeneralLayout from '../../Layouts/GeneralLayout.vue';
 
 
-defineProps({
+const props = defineProps({
     flights: Object,
     reservations: Object,
+    search: Object,
 });
 
 const flightSearchForm = useForm({
-    origin: '',
-    destination: '',
+    origin: props.search.origin || '',
+    destination: props.search.destination || '', 
 });
 </script>
 <template>

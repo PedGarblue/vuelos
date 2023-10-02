@@ -119,8 +119,11 @@ class FlightsTest extends TestCase
                     ->where('flights.0.arrival', $flight_to_search->arrival->format('Y-m-d H:i'))
                     ->where('flights.0.seats', $flight_to_search->seats)
                     ->where('flights.0.available_seats', $flight_to_search->seats)
-                    ->has('reservations', 0);
-
+                    ->has('reservations', 0)
+                    ->has('search', function (Assert $page) use ($flight_to_search) {
+                        $page->where('origin', $flight_to_search->origin);
+                        $page->where('destination', null);
+                    });
             });
     } 
 
@@ -158,7 +161,11 @@ class FlightsTest extends TestCase
                     ->where('flights.0.arrival', $flight_to_search->arrival->format('Y-m-d H:i'))
                     ->where('flights.0.seats', $flight_to_search->seats)
                     ->where('flights.0.available_seats', $flight_to_search->seats)
-                    ->has('reservations', 0);
+                    ->has('reservations', 0)
+                    ->has('search', function (Assert $page) use ($flight_to_search) {
+                        $page->where('origin', null);
+                        $page->where('destination', $flight_to_search->destination);
+                    });
 
             });
     } 

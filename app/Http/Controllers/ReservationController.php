@@ -17,8 +17,10 @@ class ReservationController extends Controller
     public function create(Request $request): Response
     {
         $flight = Flight::findOrFail($request->flight);
+        $previous_route = url()->previous();
         return Inertia::render('Reservation/Create', [
             'flight' => $flight,
+            'return_route' => $previous_route,
         ]);
     }
     /**

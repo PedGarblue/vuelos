@@ -31,6 +31,7 @@ class FlightController extends Controller
         return Inertia::render('Flight/Index', [
             'flights' => $flights,
             'reservations' => $reservations,
+            'search' => $request->all(['origin', 'destination']),
         ]);
     }
 
