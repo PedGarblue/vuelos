@@ -84,4 +84,83 @@ class FlightsTest extends TestCase
                     });
             });
     }
+
+    public function test_list_can_perform_flight_search_term_by_origin(): void
+    {
+        Flight::factory(20)->create();
+
+        $flight_to_search = Flight::factory()->create([
+            'origin' => 'LAX',
+            'destination' => 'JFK',
+        ]);
+
+        $response = $this->get('/flights?origin='. $flight_to_search->origin);
+        $response->assertStatus(200)
+            ->assertInertia(function (Assert $page) use ($flight_to_search) {
+                $page->component('Flight/Index')
+                    ->has('flights', 1, function (Assert $page) {
+                        $page->hasAll([
+                            'id',
+                            'name',
+                            'origin',
+                            'destination',
+                            'departure',
+                            'arrival',
+                            'seats',
+                            'available_seats',
+                        ]);
+                    })
+                    ->where('flights.0.id', $flight_to_search->id)
+                    ->where('flights.0.name', $flight_to_search->name)
+                    ->where('flights.0.origin', $flight_to_search->origin)
+                    ->where('flights.0.destination', $flight_to_search->destination)
+                    // cast to string to compare the date format (Y-m-d H:i)
+                    ->where('flights.0.departure', $flight_to_search->departure->format('Y-m-d H:i'))
+                    ->where('flights.0.arrival', $flight_to_search->arrival->format('Y-m-d H:i'))
+                    ->where('flights.0.seats', $flight_to_search->seats)
+                    ->where('flights.0.available_seats', $flight_to_search->seats)
+                    ->has('reservations', 0);
+
+            });
+    } 
+
+    public function test_list_can_perform_flight_search_term_by_destination(): void
+    {
+        $flights = Flight::factory(20)->create();
+
+        $flight_to_search = Flight::factory()->create([
+            'origin' => 'LAX',
+            'destination' => 'JFK',
+        ]);
+
+        $response = $this->get('/flights?destination='. $flight_to_search->destination);
+        $response->assertStatus(200)
+            ->assertInertia(function (Assert $page) use ($flight_to_search) {
+                $page->component('Flight/Index')
+                    ->has('flights', 1, function (Assert $page) {
+                        $page->hasAll([
+                            'id',
+                            'name',
+                            'origin',
+                            'destination',
+                            'departure',
+                            'arrival',
+                            'seats',
+                            'available_seats',
+                        ]);
+                    })
+                    ->where('flights.0.id', $flight_to_search->id)
+                    ->where('flights.0.name', $flight_to_search->name)
+                    ->where('flights.0.origin', $flight_to_search->origin)
+                    ->where('flights.0.destination', $flight_to_search->destination)
+                    // cast to string to compare the date format (Y-m-d H:i)
+                    ->where('flights.0.departure', $flight_to_search->departure->format('Y-m-d H:i'))
+                    ->where('flights.0.arrival', $flight_to_search->arrival->format('Y-m-d H:i'))
+                    ->where('flights.0.seats', $flight_to_search->seats)
+                    ->where('flights.0.available_seats', $flight_to_search->seats)
+                    ->has('reservations', 0);
+
+            });
+    } 
+
 }
