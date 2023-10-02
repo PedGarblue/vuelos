@@ -48,7 +48,7 @@ const form = useForm({
                     <div class="py-6">
                         <div class="flex flex-col border rounded-xl overflow-hidden">
                             <label for="seats" class="px-2 bg-gray-700 text-white">¿Cuanto asientos necesita?</label>
-                            <input id="seats" type="number" v-model="form.seats" class="px-4 rounded-b-xl"/>
+                            <input id="seats" type="number" v-model="form.seats" min="1" class="px-4 rounded-b-xl"/>
                             <!-- input error message -->
                             <div v-if="form.errors.seats">
                                 <span class="text-red-500" v-for="error in form.errors.seats" :key="error">

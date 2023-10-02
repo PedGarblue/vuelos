@@ -61,7 +61,7 @@ const deleteform = useForm({});
                         <div>
                             <div class="field">
                                 <label for="seats">Asientos</label>
-                                <input id="seats" type="number" v-model="form.seats" />
+                                <input id="seats" type="number" v-model="form.seats" min="1" />
                                 <div v-if="form.errors.seats">
                                     <span class="text-red-500" v-for="error in form.errors.seats" :key="error">
                                         {{ error }}
