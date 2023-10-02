@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Flight;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,8 +16,12 @@ class FlightController extends Controller
     public function index(): Response
     {
         $flights = Flight::all();
+        $reservations = Reservation::all();
+        $reservations->load(['tickets', 'flight']);
+
         return Inertia::render('Flight/Index', [
             'flights' => $flights,
+            'reservations' => $reservations,
         ]);
     }
 

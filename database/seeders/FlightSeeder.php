@@ -15,7 +15,7 @@ class FlightSeeder extends Seeder
     {
         // 5 flights
         // 1st flight: 100 seats
-        Flight::factory()->create([
+        $flight = Flight::factory()->create([
             'name' => 'ABC123',
             'origin' => 'LAX',
             'destination' => 'JFK',
@@ -23,6 +23,11 @@ class FlightSeeder extends Seeder
             'arrival' => '2021-09-30 18:00:00',
             'seats' => 100,
         ]);
+        $flight
+            ->reservations()
+            ->create()
+            ->tickets()
+            ->createMany([ [ ], [ ], [ ] ]); 
         Flight::factory(10)->create();
     }
 }

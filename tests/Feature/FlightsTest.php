@@ -50,7 +50,16 @@ class FlightsTest extends TestCase
                     ->where('flights.0.departure', $flights->first()->departure->format('Y-m-d H:i'))
                     ->where('flights.0.arrival', $flights->first()->arrival->format('Y-m-d H:i'))
                     ->where('flights.0.seats', $flights->first()->seats)
-                    ->where('flights.0.available_seats', $flights->first()->seats - 3); // This is a computed property, so it's not in the database
+                    ->where('flights.0.available_seats', $flights->first()->seats - 3) // This is a computed property, so it's not in the database
+                    ->has('reservations', 1, function (Assert $page) {
+                        $page->hasAll([
+                            'id',
+                            'flight_id',
+                            'tickets',
+                            'created_at',
+                            'updated_at',
+                        ]);
+                    });
             });
     }
 }
