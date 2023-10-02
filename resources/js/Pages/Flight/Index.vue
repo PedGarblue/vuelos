@@ -1,4 +1,5 @@
 <script setup>
+import { useForm } from '@inertiajs/vue3';
 import FlightCard from '../../Components/FlightCard.vue';
 import ReservationCard from '../../Components/ReservationCard.vue';
 import GeneralLayout from '../../Layouts/GeneralLayout.vue';
@@ -7,6 +8,11 @@ import GeneralLayout from '../../Layouts/GeneralLayout.vue';
 defineProps({
     flights: Object,
     reservations: Object,
+});
+
+const flightSearchForm = useForm({
+    origin: '',
+    destination: '',
 });
 </script>
 <template>
@@ -32,6 +38,33 @@ defineProps({
         <div>
             <div class="py-2">
                 <h2 class="text-xl">Listado de Vuelos</h2>
+            </div>
+            <div class="border rounded-xl p-2">
+                <div class="flex gap-4 mb-2">
+                    <div>
+                        <label for="origin">Origen</label>
+                        <input
+                            id="origin"
+                            type="text"
+                            v-model="flightSearchForm.origin"
+                            class="border rounded-lg p-2 w-full"
+                        />
+                    </div>
+                    <div>
+                        <label for="destination">Destino</label>
+                        <input
+                            id="destination"
+                            type="text"
+                            v-model="flightSearchForm.destination"
+                            class="border rounded-lg p-2 w-full"
+                        />
+                    </div>
+                </div>
+                <div >
+                    <button class="bg-blue-500 text-white rounded-lg p-2" @click="flightSearchForm.get('/flights')">
+                        Buscar
+                    </button>
+                </div>
             </div>
             <div class="flight-list">
                 <FlightCard v-for="flight in flights" :flight="flight" :key="flight.id" />

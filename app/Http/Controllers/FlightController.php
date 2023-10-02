@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexFlightRequest;
 use App\Models\Flight;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
@@ -13,9 +14,17 @@ class FlightController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(IndexFlightRequest $request): Response
     {
-        $flights = Flight::all();
+        // search if it exists
+        $flights = Flight::query()
+            ->when($request->origin, function ($query, $search) {
+                $query->orWhere('origin', 'like', "%{$search}%");
+            })
+            ->when($request->destination, function ($query, $search) {
+                $query->orWhere('destination', 'like', "%{$search}%");
+            })
+            ->get();
         $reservations = Reservation::all();
         $reservations->load(['tickets', 'flight']);
 
