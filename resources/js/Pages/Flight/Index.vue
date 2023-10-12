@@ -25,6 +25,7 @@ const reservationsContainer = reactive({
 const toggleReservationsContainer = () => {
     reservationsContainer.show = !reservationsContainer.show;
 };
+console.log(props.flights)
 </script>
 <template>
     <Head title="Vuelos - Listado" />

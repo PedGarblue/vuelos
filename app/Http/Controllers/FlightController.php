@@ -36,8 +36,9 @@ class FlightController extends Controller
         // omit flights with no seats available
         $flights = $flights->filter(function ($flight) {
             return $flight->available_seats > 0;
-        });
-
+        })
+        ->sortBy('available_seats')
+        ->values();
 
         $reservations = Reservation::all();
         $reservations->load(['tickets', 'flight']);

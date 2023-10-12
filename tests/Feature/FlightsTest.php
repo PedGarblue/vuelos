@@ -40,6 +40,10 @@ class FlightsTest extends TestCase
     public function test_lists_flights_and_renders_correctly(): void
     {
         $flights = Flight::factory(20)->create();
+        $first_flight = Flight::factory()->create([
+            // always be the first because of the sorting
+            'seats' => 1,
+        ]);
         $reservation = Reservation::factory()->create([
             'flight_id' => $flights->first()->id,
         ]);
@@ -51,9 +55,9 @@ class FlightsTest extends TestCase
 
         $response = $this->get('/flights');
         $response->assertStatus(200)
-            ->assertInertia(function (Assert $page) use ($flights) {
+            ->assertInertia(function (Assert $page) use ($first_flight) {
                 $page->component('Flight/Index')
-                    ->has('flights', 20, function (Assert $page) {
+                    ->has('flights', 21, function (Assert $page) {
                         $page->hasAll([
                             'id',
                             'name',
@@ -65,15 +69,15 @@ class FlightsTest extends TestCase
                             'available_seats',
                         ]);
                     })
-                    ->where('flights.0.id', 1)
-                    ->where('flights.0.name', $flights->first()->name)
-                    ->where('flights.0.origin', $flights->first()->origin)
-                    ->where('flights.0.destination', $flights->first()->destination)
+                    ->where('flights.0.id', $first_flight->id)
+                    ->where('flights.0.name', $first_flight->name)
+                    ->where('flights.0.origin', $first_flight->origin)
+                    ->where('flights.0.destination', $first_flight->destination)
                     // cast to string to compare the date format (Y-m-d H:i)
-                    ->where('flights.0.departure', $flights->first()->departure->format('Y-m-d H:i'))
-                    ->where('flights.0.arrival', $flights->first()->arrival->format('Y-m-d H:i'))
-                    ->where('flights.0.seats', $flights->first()->seats)
-                    ->where('flights.0.available_seats', $flights->first()->seats - 3) // This is a computed property, so it's not in the database
+                    ->where('flights.0.departure', $first_flight->departure->format('Y-m-d H:i'))
+                    ->where('flights.0.arrival', $first_flight->arrival->format('Y-m-d H:i'))
+                    ->where('flights.0.seats', $first_flight->seats)
+                    ->where('flights.0.available_seats', $first_flight->seats) // This is a computed property, so it's not in the database
                     ->has('reservations', 1, function (Assert $page) {
                         $page->hasAll([
                             'id',
@@ -209,6 +213,42 @@ class FlightsTest extends TestCase
 
             });
     } 
+
+    public function test_list_can_perform_flight_sorting_by_seats_ascending(): void {
+
+        $flight_taken = Flight::factory()->create([
+            'origin' => '',
+            'destination' => 'JFK',
+        ]);
+        $reservation = Reservation::factory()->create([
+            'flight_id' => $flight_taken->id,
+        ]);
+        Ticket::factory(10)->create([
+            'reservation_id' => $reservation->id,
+        ]);
+
+        // flight with no seats taken
+        $flight = Flight::factory()->create();
+
+        $response = $this->get('/flights');
+        $response->assertStatus(200)
+            ->assertInertia(function (Assert $page) use ($flight_taken, $flight) {
+                $page->component('Flight/Index')
+                    ->has('flights', 2, function (Assert $page) {
+                        $page->hasAll([
+                            'id',
+                            'name',
+                            'origin',
+                            'destination',
+                            'departure',
+                            'arrival',
+                            'seats',
+                            'available_seats',
+                        ]);
+                    })
+                    ->where('flights.0.id', $flight_taken->id);
+            });
+    }
 
     public function test_list_can_perform_flight_search_by_min_date(): void
     {
